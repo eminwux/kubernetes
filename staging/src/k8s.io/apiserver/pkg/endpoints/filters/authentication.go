@@ -63,13 +63,19 @@ func withAuthentication(handler http.Handler, auth authenticator.Request, failed
 		if len(apiAuds) > 0 {
 			req = req.WithContext(authenticator.WithAudiences(req.Context(), apiAuds))
 		}
+		klog.Info("BEFOREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
 		resp, ok, err := auth.AuthenticateRequest(req)
+		klog.Info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFTEEER")
 		authenticationFinish := time.Now()
 		defer func() {
 			metrics(req.Context(), resp, ok, err, apiAuds, authenticationStart, authenticationFinish)
 		}()
 		if err != nil || !ok {
 			if err != nil {
+				klog.ErrorS(err, "Unable to authenticate the request")
+				klog.ErrorS(err, "Unable to authenticate the request")
+				klog.ErrorS(err, "Unable to authenticate the request")
+				klog.ErrorS(err, "Unable to authenticate the request")
 				klog.ErrorS(err, "Unable to authenticate the request")
 			}
 			failed.ServeHTTP(w, req)

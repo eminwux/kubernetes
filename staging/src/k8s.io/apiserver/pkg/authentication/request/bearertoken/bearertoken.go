@@ -23,6 +23,7 @@ import (
 
 	"k8s.io/apiserver/pkg/authentication/authenticator"
 	"k8s.io/apiserver/pkg/warning"
+	"k8s.io/klog/v2"
 )
 
 const (
@@ -40,6 +41,8 @@ func New(auth authenticator.Token) *Authenticator {
 var invalidToken = errors.New("invalid bearer token")
 
 func (a *Authenticator) AuthenticateRequest(req *http.Request) (*authenticator.Response, bool, error) {
+	klog.Info("TOKEEEEEEEEEEEEN START")
+
 	auth := strings.TrimSpace(req.Header.Get("Authorization"))
 	if auth == "" {
 		return nil, false, nil
@@ -72,5 +75,6 @@ func (a *Authenticator) AuthenticateRequest(req *http.Request) (*authenticator.R
 		err = invalidToken
 	}
 
+	klog.Infof("TOKEEEEEEEEEEEEN FINISH, err:%v", err)
 	return resp, ok, err
 }

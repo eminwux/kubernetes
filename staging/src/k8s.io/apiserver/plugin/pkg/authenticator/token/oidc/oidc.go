@@ -451,15 +451,15 @@ func untrustedIssuer(token string) (string, error) {
 	return claims.Issuer, nil
 }
 
-func hasCorrectIssuer(iss, tokenData string) bool {
+func hasCorrectIssuer(iss, tokenData string) error {
 	uiss, err := untrustedIssuer(tokenData)
 	if err != nil {
-		return false
+		return err
 	}
 	if uiss != iss {
-		return false
+		return fmt.Errorf("issuers do not match")
 	}
-	return true
+	return nil
 }
 
 // endpoint represents an OIDC distributed claims endpoint.
@@ -674,8 +674,16 @@ func (v *idTokenVerifier) verifyAudience(t *oidc.IDToken) error {
 }
 
 func (a *jwtAuthenticator) AuthenticateToken(ctx context.Context, token string) (*authenticator.Response, bool, error) {
-	if !hasCorrectIssuer(a.jwtAuthenticator.Issuer.URL, token) {
-		return nil, false, nil
+	// if !hasCorrectIssuer(a.jwtAuthenticator.Issuer.URL, token) {
+	// 	return nil, false, nil
+	// }
+	klog.Info("OIDC START AuthenticateToken")
+	klog.Info("OIDC START AuthenticateToken")
+	klog.Info("OIDC START AuthenticateToken")
+	klog.Info("OIDC START AuthenticateToken")
+
+	if err := hasCorrectIssuer(a.jwtAuthenticator.Issuer.URL, token); err != nil {
+		return nil, false, err
 	}
 
 	verifier, ok := a.idTokenVerifier()

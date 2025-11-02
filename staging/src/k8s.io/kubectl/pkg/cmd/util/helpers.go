@@ -262,6 +262,8 @@ func StandardErrorMessage(err error) (string, bool) {
 	switch t := err.(type) {
 	case *url.Error:
 		klog.V(4).Infof("Connection error: %s %s: %v", t.Op, t.URL, t.Err)
+		// Unable to connect to the server: Get "https://core1.n1x.es/realms/tenant/.well-known/openid-configuration": tls: failed to verify certificate: x509: certificate signed by unknown authority
+		// I0906 12:36:06.344105  806468 helpers.go:264] Connection error: Get https://cn0.cl0.n1x.es:6443/api/v1/namespaces/default/pods?limit=500: Get "https://core1.n1x.es/realms/tenant/.well-known/openid-configuration": tls: failed to verify certificate: x509: certificate signed by unknown authority
 		switch {
 		case strings.Contains(t.Err.Error(), "connection refused"):
 			host := t.URL
